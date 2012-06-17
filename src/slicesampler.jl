@@ -88,6 +88,7 @@ function slice_sampler(x0::Float64, g::Function)
   slice_sampler(x0,g,.1,10000,-Inf,Inf)
 end
 
+# TODO: Any easy/useful assertions to make
 function test_slice_sampler()
   function g(x)
     log(dnorm(x,0,.5))

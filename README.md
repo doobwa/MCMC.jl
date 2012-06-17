@@ -2,7 +2,7 @@
 
 In Bayesian modeling we are often faced with an unnormalized density (e.g. a posterior distribution) that we want to know about.  A few general purpose MCMC techniques for such situations include [Metropolis-Hastings](https://en.wikipedia.org/wiki/Metropolis%E2%80%93Hastings_algorithm), [slice sampling](https://en.wikipedia.org/wiki/Slice_sampling), and [Hamiltonian Monte Carlo](http://www.cs.toronto.edu/~radford/ftp/ham-mcmc.pdf) (HMC).
 
-By implementing these samplers in (Julia)[http://julialang.org], they can be written naturally while being quite fast.  By providing a common interface across samplers, it also becomes easy to incorporate these techniques as components of larger projects.
+By implementing these samplers in [Julia](http://julialang.org), they can be written naturally while being quite fast.  By providing a common interface across samplers, it also becomes easy to incorporate these techniques as components of larger projects.
 
 ## Example
 
@@ -36,8 +36,12 @@ An R implementation of slice sampling is included for comparison.
        user  system elapsed 
       2.050   0.000   2.041 
 
-The R script `examples/plot.r` loads the various samples and plots summaries.  (This image)[https://github.com/doobwa/mcmc.jl/tree/master/examples/results/slice.h.dat.png] shows the results of using the slice sampler in Julia on `log(h(x))`.  The true density is the black curve superimposed on the histogram.  These plots provide reassurance that we are correctly sampling from the intended distribution and mixing fairly well.
+The R script `examples/plot.r` loads the various samples and plots summaries.  [This image](https://github.com/doobwa/mcmc.jl/tree/master/examples/results/slice.h.dat.png) shows the results of using the slice sampler in Julia on `log(h(x))`.  The true density is the black curve superimposed on the histogram.  These plots provide reassurance that we are correctly sampling from the intended distribution and mixing fairly well.
 
 Note: The goal here is to illustrate the use of these routines, not compare the efficacy of different samplers.  
 
+## Credits
 The slice sampling code is due to Radford Neal, obtained (here)[http://www.cs.toronto.edu/~radford/software-online.html].
+
+## TODO
+Before adding in HMC, it might be nice to use Julia's Type system to allow for the presence or absence of a gradient for the function of interest.
