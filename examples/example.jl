@@ -11,8 +11,9 @@ end
 
 function mcmc(x::Float64, g::Function, sampler::Function, niter::Int64)
   xs = zeros(niter)
+  gx = g(x)
   for iter = 1:niter
-    x,lp = sampler(x,g)
+    x,gx = sampler(x,g,gx)
     xs[iter] = x
   end
   return xs

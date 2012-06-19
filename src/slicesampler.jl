@@ -84,8 +84,12 @@ function slice_sampler(x0::Float64, g::Function, w::Float64, m::Int64, lower::Fl
   slice_sampler(x0,g,w,m,lower,upper,gx0)
 end
 
+function slice_sampler(x0::Float64, g::Function, gx0::Float64)
+  slice_sampler(x0,g,.5,10000,-Inf,Inf,gx0)
+end
+
 function slice_sampler(x0::Float64, g::Function)
-  slice_sampler(x0,g,.1,10000,-Inf,Inf)
+  slice_sampler(x0,g,.5,10000,-Inf,Inf)
 end
 
 # TODO: Any easy/useful assertions to make
