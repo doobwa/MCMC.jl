@@ -92,6 +92,12 @@ function slice_sampler(x0::Float64, g::Function)
   slice_sampler(x0,g,.5,10000,-Inf,Inf)
 end
 
+# Interface using Density type
+
+slice_sampler(x0::Float64, d::Density, w::Float64, m::Int64, lower::Float64, upper::Float64, gx0::Float64) = slice_sampler(x0::Float64, d.f, w::Float64, m::Int64, lower::Float64, upper::Float64, gx0::Float64)
+
+slice_sampler(x0::Float64, d::Density, gx0::Float64) = slice_sampler(x0::Float64, d.f, gx0::Float64)
+
 # TODO: Any easy/useful assertions to make
 function test_slice_sampler()
   function g(x)

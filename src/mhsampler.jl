@@ -13,6 +13,8 @@ function mh_sampler(x::Float64, g::Function, sd::Float64)
   mh_sampler(x,g,sd,gx)
 end
 
-function mh_sampler(x::Float64, g::Function)
-  mh_sampler(x,g,.5)
-end
+mh_sampler(x::Float64, g::Function) = mh_sampler(x,g,.5)
+
+# Interface using Density type
+mh_sampler(x::Float64, g::Density, sd::Float64, gx::Float64) = mh_sampler(x, Density.f, sd, gx)
+
