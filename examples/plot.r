@@ -29,3 +29,14 @@ for (i in c("g","h")) {   # target densities
     dev.off()
   }
 }
+
+# Plots for multivariate example
+samples_gibbs <- read.csv("examples/multivariate/gibbs.dat",header=FALSE)
+samples_hmc <- read.csv("examples/multivariate/hmc.dat",header=FALSE)
+png("compare.png",width=1000,height=300)
+par(mfrow=c(1,2))
+plot(samples_gibbs)
+plot(samples_hmc)
+  acf(samples)
+  dev.off()
+}
