@@ -1,14 +1,14 @@
 # MCMC Routines in Julia
 
-In Bayesian modeling we are often faced with an unnormalized density (e.g. a posterior distribution) that we want to know about.  A few general purpose MCMC techniques for such situations include [Metropolis-Hastings](https://en.wikipedia.org/wiki/Metropolis%E2%80%93Hastings_algorithm), [slice sampling](https://en.wikipedia.org/wiki/Slice_sampling), and [Hamiltonian Monte Carlo](http://www.cs.toronto.edu/~radford/ftp/ham-mcmc.pdf) (HMC).
+In Bayesian modeling we are often faced with an unnormalized density (e.g. a posterior distribution) that we want to know about.  A few general purpose MCMC techniques for such situations include [Metropolis-Hastings](https://en.wikipedia.org/wiki/Metropolis%E2%80%93Hastings_algorithm), [slice sampling](https://en.wikipedia.org/wiki/Slice_sampling), and [Hamiltonian Monte Carlo](http://www.cs.toronto.edu/~radford/ftp/ham-mcmc.pdf) (HMC).  
 
-By implementing these samplers in [Julia](http://julialang.org), they can be written naturally while being quite fast.  By providing a common interface across samplers, it also becomes easy to incorporate these techniques as components of larger projects.
+By implementing these samplers in [Julia](http://julialang.org), they can be written naturally while being quite fast.  By providing a common interface across samplers, we can perform MCMC with much less effort: in several of the examples below we only needed to implement a function that computes the unnormalized density of interest.  More often, these tools are  incorporated as components of a larger sampling scheme.
 
 ## Example
 
-Use slice sampling to obtain a new sample `x` from `g` where the previous state was `x`.  Also returns `g(x)` for the new value.
+Suppose we have a function `g(x)` that we want to sample.  We can use slice sampling to obtain a new sample `x_new` from `g` where the previous state was `x`.  The sampler also returns `g(x)` for the new value.
 
-    x,gx = slice_sampler(x,g)
+    x_new,gx = slice_sampler(x,g)
 
 ## Comparison with R
 
