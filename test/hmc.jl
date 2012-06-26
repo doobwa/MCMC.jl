@@ -19,8 +19,20 @@ x,gx = hmc_sampler(x0, f, gradient, epsilon, L)
 @assert isa(gx,Float64)
 
 # Basic tests on Density interface
+dd = DifferentiableDensity(f,gradient)
 x,gx = hmc_sampler(x0, dd, epsilon, L)
 
 @assert isa(x,Array{Float64,2})
 @assert isa(gx,Float64)
 
+# Example of using Options with an HMC sampler allowing bounds
+opts = Options(:stepsize,0.01,
+               :numsteps,int(50),
+               :bounded,[1],          # list of dimensions that are bounded
+               :lower_bounds,[0],  # lower bound for 1st dim
+               :upper_bounds,[Inf])   # upper bound for 1st dim
+x,gx = bounded_hmc_sampler(x0, dd, opts)
+
+@assert isa(x,Array{Float64,2})
+@assert isa(gx,Float64)
+@assert x[1] > 0

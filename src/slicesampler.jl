@@ -98,12 +98,7 @@ slice_sampler(x0::Float64, d::Density, w::Float64, m::Int64, lower::Float64, upp
 
 slice_sampler(x0::Float64, d::Density, gx0::Float64) = slice_sampler(x0::Float64, d.f, gx0::Float64)
 
-# TODO: Any easy/useful assertions to make
-function test_slice_sampler()
-  function g(x)
-    log(dnorm(x,0,.5))
-  end
-  x0 = 0.0
-  x,lp = slice_sampler(x0,g,1.0,10000,-Inf,Inf)
+function slice_sampler(x0::Float64, d::Density, opts::Options)
+  gx0 = g(x0)
+  slice_sampler(x0::Float64, d.f, opts[:w],opts[:m],opts[:lower],opts[:upper],gx0::Float64)
 end
-
