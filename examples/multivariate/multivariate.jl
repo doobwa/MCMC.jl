@@ -5,65 +5,60 @@
 function f(v::Array{Float64,2})
   x = v[1]
   y = v[2]
-  x^2 * exp(-x*y^2 - y^2 + 2*y - 4*x)
+  if x < 0
+    return -Inf
+  end
+  2*log(x) - x*y^2 - y^2 + 2*y - 4*x
 end
 function gradient(v::Array{Float64,2})
   x = v[1]
   y = v[2]
-  tmp = exp(-x*y^2 - y^2 + 2*y - 4*x)
-  dx = 2 * x * tmp + x^2 * tmp * (-2*x*y - 4)
-  dy = x^2 * tmp * (-2*x*y - 2*y + 2)
+  # TODO: Deal with x < 0 boundary
+  dx = 2/x - y^2 - 4
+  dy = -2*x*y - 2*y + 2
   [dx dy]
 end
-
-f([.2 .5])
-gradient([.2 .5])
-dd = DifferentiableDensity(f,gradient)
 
 # Sampler that draws from the conditional distributions
 function gibbs_sampler(v::Array{Float64}, dd, params)
   x = v[1]
   y = v[2]
-  x = randg(3) * (y*y + 4)
-  y = 1/(x + 1) + randn()/sqrt(2(x + 1))
+  x = rgamma(1,3,1/(y*y + 4))[1]
+  y = rnorm(1, 1/(x+1),1/sqrt(2*(x + 1)))[1]
   [x y], dd.f([x y])
 end
 
 # General MCMC routine for collecting samples from a chain.  
 # We enforce samplers to return the value of the density f at the new state.
-function mcmc(x::Array{Float64}, dd::DifferentiableDensity, sampler::Function, sampler_params::Array, niter::Int64)
+function mcmc(x::Array{Float64}, dd, sampler::Function, opts::Options, niter::Int64)
   P = length(x)
   xs = zeros((niter,P))
   progress = zeros(niter)
   for iter = 1:niter
-    x, gx = sampler(x, dd, sampler_params)
+    x, fx = sampler(x, dd, opts)
     xs[iter,:] = x
-    progress[iter] = gx
+    progress[iter] = fx
   end
   return xs, progress
 end
 
-x0 = [0.0 0.0]
-hmc_params = [0.05 20]
+x0 = [0.1 0.5]
 num_iterations = 10000
-xs, progress = mcmc(x0, dd, hmc_sampler, hmc_params, num_iterations)
+
+dd = DifferentiableDensity(f,gradient)
+
+opts = Options(:stepsize,0.0001,
+               :numsteps,int(50),
+               :bounded,[1],          # list of dimensions that are bounded
+               :lower_bounds,[0],     # lower bound for 1st dim
+               :upper_bounds,[Inf])   # upper bound for 1st dim
+xs, progress = mcmc(x0, dd, bounded_hmc_sampler, opts, num_iterations)
 csvwrite("examples/multivariate/hmc.dat",xs)
 
-gibbs_params = [3 4 1]  # TODO: Use this in the actual method
-xs, progress = mcmc(x0, dd, gibbs_sampler, gibbs_params, num_iterations)
+opts = Options()
+xs, progress = mcmc(x0, dd, gibbs_sampler, opts, num_iterations)
 csvwrite("examples/multivariate/gibbs.dat",xs)
 
-
-# Function for Gibbs sampling multivariate density via slice sampling
-# TODO: Following is still broken
-function mv_slice_sampler(x::Array{Float64}, f::Function)
-  P = length(x)
-  function fp(w)  # want to fix all but the p'th value of this array
-    x[p] = w
-    f(x)
-  end
-  for p = 1:length(x)
-    x[p], gxp = slice_sampler(x[p], fp)  # TODO: initialize at last point
-  end
-  x, gxp
-end
+opts = Options()
+xs, progress = mcmc(x0, dd, mv_slice_sampler, opts, num_iterations)
+csvwrite("examples/multivariate/slice.dat",xs)

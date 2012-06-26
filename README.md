@@ -48,5 +48,9 @@ Note: The goal here is to illustrate the use of these routines, not compare the 
 The slice sampling code is due to Radford Neal, obtained [here](http://www.cs.toronto.edu/~radford/software-online.html).
 
 ## TODO
-* Before adding in HMC, it might be nice to use Julia's Type system to allow for the presence or absence of a gradient for the function of interest.
+* Multivariate example broken
+* Implement Radford Neal's windowed, tempered, and bounded HMC
+* Allow samplers to return other metadata (e.g. number of function evaluations)
 * Use the previous value of `g(x)` so that we do fewer evaluations of `g`
+* Make better use of Density type
+* Use Options type for passing options to the various samplers
