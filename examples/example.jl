@@ -1,5 +1,4 @@
 load("src/mcmc.jl")
-load("examples/timeit.jl")
 
 function g(x)
   log(dnorm(x,0,.5))
@@ -22,15 +21,15 @@ end
 x0 = 0.0
 niter = 10000
 
-@timeit xs = mcmc(x0,g,slice_sampler,niter) "slice on g"
+@elapsed xs = mcmc(x0,g,slice_sampler,niter)
 csvwrite("examples/results/slice.g.dat",xs)
 
-@timeit xs = mcmc(x0,h,slice_sampler,niter) "slice on h"
+@elapsed xs = mcmc(x0,h,slice_sampler,niter) 
 csvwrite("examples/results/slice.h.dat",xs)
 
-@timeit xs = mcmc(x0,g,mh_sampler,niter) "mh on g"
+@elapsed xs = mcmc(x0,g,mh_sampler,niter)
 csvwrite("examples/results/mh.g.dat",xs)
 
-@timeit xs = mcmc(x0,h,mh_sampler,niter) "mh on h"
+@elapsed xs = mcmc(x0,h,mh_sampler,niter)
 csvwrite("examples/results/mh.h.dat",xs)
 

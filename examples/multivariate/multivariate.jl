@@ -2,6 +2,10 @@
 # http://dmbates.blogspot.com/2012_05_01_archive.html
 # http://darrenjw.wordpress.com/2011/07/16/gibbs-sampler-in-various-languages-revisited/
 
+# Requires extras/Rmath.jl
+# extras/options.jl
+load("examples/multivariate/mv_slice_sampler.jl")
+
 function f(v::Array{Float64,2})
   x = v[1]
   y = v[2]
@@ -52,13 +56,13 @@ opts = Options(:stepsize,0.0001,
                :bounded,[1],          # list of dimensions that are bounded
                :lower_bounds,[0],     # lower bound for 1st dim
                :upper_bounds,[Inf])   # upper bound for 1st dim
-xs, progress = mcmc(x0, dd, bounded_hmc_sampler, opts, num_iterations)
+@time xs, progress = mcmc(x0, dd, bounded_hmc_sampler, opts, num_iterations);
 csvwrite("examples/multivariate/hmc.dat",xs)
 
 opts = Options()
-xs, progress = mcmc(x0, dd, gibbs_sampler, opts, num_iterations)
+@time xs, progress = mcmc(x0, dd, gibbs_sampler, opts, num_iterations);
 csvwrite("examples/multivariate/gibbs.dat",xs)
 
 opts = Options()
-xs, progress = mcmc(x0, dd, mv_slice_sampler, opts, num_iterations)
+@time xs, progress = mcmc(x0, dd, mv_slice_sampler, opts, num_iterations);
 csvwrite("examples/multivariate/slice.dat",xs)
