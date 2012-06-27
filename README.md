@@ -6,11 +6,11 @@ By implementing these samplers in [Julia](http://julialang.org), they can be wri
 
 ## Basic idea
 
-Suppose we have a function `g(x)`.  Our aim is to treat `g` as an unnormalized probability density and obtain samples from the resulting probability distribution.  We can use slice sampling to obtain a new sample from `g` where the previous state was `x`.  The sampler also returns `g(x)` at the new value.
+Suppose we have a function `g(x)`.  Our aim is to treat `g` as an unnormalized probability density and obtain samples from the resulting probability distribution.  We can use slice sampling to obtain a new sample from `g` where the previous state was `x` using the `slice_sampler` method in this package:
 
     x,gx = slice_sampler(x,g)
 
-We can obtain many samples of by repeatedly calling the above function.  In truth, this sequence of `x` values is a Markov chain whose limiting distribution is `g(x)`, and though the samples are not independent, they often can be a useful summary of the function `g(x)`.  In the case of Bayesian modeling, the function of interest `g(x)` is the posterior distribution of a model's parameters given the observed data.
+This function also returns `g(x)` at the new value, as shown above.  We can obtain many samples of by repeatedly calling the above function.  In truth, this sequence of `x` values is a Markov chain whose limiting distribution is `g(x)`, and though the samples are not independent, they often can be a useful summary of the function `g(x)`.  In the case of Bayesian modeling, the function of interest `g(x)` is the posterior distribution of a model's parameters given the observed data.
 
 ## Univariate example
 
@@ -52,12 +52,12 @@ Note: The goal here is to illustrate the use of these routines, not compare the 
 
 In [several](http://darrenjw.wordpress.com/2010/04/28/mcmc-programming-in-r-python-java-and-c/) [recent](https://darrenjw.wordpress.com/2011/07/31/faster-gibbs-sampling-mcmc-from-within-r/) [blog](http://dirk.eddelbuettel.com/blog/2011/07/14/) [posts](http://dmbates.blogspot.com/2012_05_01_archive.html) people have explored MCMC for the following bivariate density:
 
-\[ f(x,y) = K x^2 \exp{-xy^2 - y^2 + 2y - 4x} \]
+f(x,y) = K x^2 exp{-xy^2 - y^2 + 2y - 4x}
 
-These posts perform MCMC by [Gibbs sampling](https://en.wikipedia.org/wiki/Gibbs_sampling) using the following full conditional distributions:
+where K is some unknown normalizing constant.  These posts perform MCMC by [Gibbs sampling](https://en.wikipedia.org/wiki/Gibbs_sampling) using the following full conditional distributions:
 
-\[ x|y \sim \mbox{Gamma}(3,1/(y^2+4)) \]
-\[ y|x \sim \mbox{Normal}(1/(1+x), 1/(2(1+x))) \]
+x|y ~ Gamma(3,1/(y^2+4))
+y|x ~ Normal(1/(1+x), 1/(2(1+x)))
 
 [NB: The second parameter in the Gamma is a rate parameter.]
 For some models, it can be a pain (or analytically intractable) to derive full conditional distributions for some parameters.  The `examples/multivariate/multivariate.jl` script compares the above approach versus iteratively slice sampling in each dimension.  [These plots](https://github.com/doobwa/mcmc.jl/tree/master/examples/multivariate/compare.png) show the density evaluated at a grid of points, then 2000 samples from the Gibbs sampling algorithm, then 2000 samples from the multivariate slice sampler.  One can also look at the [trace plots](https://github.com/doobwa/mcmc.jl/tree/master/examples/multivariate/trace.png) for each sampler across each iteration.
@@ -73,7 +73,7 @@ elapsed time: 0.12020492553710938 seconds
 ```
 
 ## Credits
-The slice sampling and HMC algorithms implemented here are based on Radford Neal's R code obtained [here](http://www.cs.toronto.edu/~radford/software-online.html).
+The slice sampling and HMC algorithms implemented here are based on Radford Neal's [R code](http://www.cs.toronto.edu/~radford/software-online.html).
 
 ## TODO
 * Implement Radford Neal's...
