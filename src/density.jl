@@ -3,11 +3,9 @@
 
 type Density
   f::Function
-  Density(f::Function) = new(f)
 end
 
 type DifferentiableDensity  # maybe <: DifferentiableFunction ?
   f::Function 
   gradient::Function
-  DifferentiableDensity(f::Function,gradient::Function) = new(f,gradient)
 end
