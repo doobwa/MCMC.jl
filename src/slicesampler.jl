@@ -24,7 +24,7 @@ function slice_sampler(x0::Float64, g::Function, w::Float64, m::Int64, lower::Fl
   
   # Determine the slice level, in log terms.
   
-  logy = gx0 - rexp(1)[1] 
+  logy = gx0 - rand(Exponential(1.0))
 
   # Find the initial interval to sample from.
 
