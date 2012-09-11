@@ -24,22 +24,22 @@ function slice_sampler(x0::Float64, g::Function, w::Float64, m::Int64, lower::Fl
   
   # Determine the slice level, in log terms.
   
-  logy = gx0 - rand(Exponential(1.0))
+  logy::Float64 = gx0 - rand(Exponential(1.0))
 
   # Find the initial interval to sample from.
 
-  u = rand() * w
-  L = x0 - u
-  R = x0 + (w-u)
+  u::Float64 = rand() * w
+  L::Float64 = x0 - u
+  R::Float64 = x0 + (w-u)
 
   # Expand the interval until its ends are outside the slice, or until
   # the limit on steps is reached.  
 
-  J = floor(rand() * m)
-  K = (m-1) - J
+  J::Int64 = floor(rand() * m)
+  K::Int64 = (m-1) - J
 
   while J > 0
-    if L <= lower || g(L) <= logy
+    if L <= lower || g(L)::Float64 <= logy
       break
     end
     L -= w
@@ -47,7 +47,7 @@ function slice_sampler(x0::Float64, g::Function, w::Float64, m::Int64, lower::Fl
   end
 
   while K > 0
-    if R >= upper || g(R) <= logy
+    if R >= upper || g(R)::Float64 <= logy
       break
     end
     R += w
@@ -61,11 +61,11 @@ function slice_sampler(x0::Float64, g::Function, w::Float64, m::Int64, lower::Fl
   
   # Sample from the interval, shrinking it on each rejection.
 
-  x1 = 0  # need to initialize it in this scope first
-  gx1 = 0
+  x1::Float64 = 0.0  # need to initialize it in this scope first
+  gx1::Float64 = 0.0
   while true 
     x1 = rand() * (R-L) + L
-    gx1 = g(x1)
+    gx1 = g(x1)::Float64
     if gx1 >= logy
       break
     end
