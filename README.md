@@ -21,7 +21,6 @@ Consider the following two functions, where `dnorm(x,mu,sigma)` is the density N
 
 The following will run a julia script that performs 10000 iterations of slice sampling and MH on `log(g)` and `log(h)` respectively.  From the `mcmc/` directory:
 
-    julia> load("[path to julia]/extras/Rmath.jl")
     julia> load("examples/example.jl")
 
 On my laptop I get the following timings:

@@ -1,4 +1,5 @@
-# Needs Rmath.jl
+load("Rmath.jl")
+
 load("src/density.jl")
 load("src/mhsampler.jl")
 load("src/slicesampler.jl")
