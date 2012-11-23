@@ -51,7 +51,7 @@ Note: The goal here is to illustrate the use of these routines, not compare the 
 
 In [several](http://darrenjw.wordpress.com/2010/04/28/mcmc-programming-in-r-python-java-and-c/) [recent](https://darrenjw.wordpress.com/2011/07/31/faster-gibbs-sampling-mcmc-from-within-r/) [blog](http://dirk.eddelbuettel.com/blog/2011/07/14/) [posts](http://dmbates.blogspot.com/2012_05_01_archive.html) people have explored MCMC for the following bivariate density:
 
-![equation](f(x,y) = K x^2 \mbox{exp}(-xy^2 - y^2 + 2y - 4x))
+$$f(x,y) = K x^2 \mbox{exp}(-xy^2 - y^2 + 2y - 4x)$$
 
 where K is some unknown normalizing constant.  These posts perform MCMC by [Gibbs sampling](https://en.wikipedia.org/wiki/Gibbs_sampling) using the following full conditional distributions:
 
