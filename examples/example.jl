@@ -1,11 +1,19 @@
-load("src/mcmc.jl")
+load("Distributions")
+using Distributions
+
+load("MCMC")
+using MCMC
+
+function f(x)
+  log(0.75 * pdf(Normal(0.0, 1.0), x) + 0.25 * pdf(Normal(10.0, 1.0), x))
+end
 
 function g(x)
-  log(dnorm(x,0,.5))
+  log(pdf(Normal(x,0,.5)))
 end
 
 function h(x)
-  log(dnorm(x,-1,.35) + 2*dnorm(x,1,.5) + 1.5*dnorm(x,2,.25))
+  log(pdf(Normal(x,-1,.35)) + 2*pdf(Normal(x,1,.5)) + 1.5*pdf(Normal(x,2,.25)))
 end
 
 function mcmc(x::Float64, g::Function, sampler::Function, niter::Int64)
@@ -18,18 +26,18 @@ function mcmc(x::Float64, g::Function, sampler::Function, niter::Int64)
   return xs
 end
 
-x0 = 0.0
-niter = 10000
+@elapsed samples = mcmc(0.0, f, slice_sampler, 50_000)
+csvwrite("examples/results/slice.f.csv", samples)
 
-@elapsed xs = mcmc(x0,g,slice_sampler,niter)
-csvwrite("examples/results/slice.g.dat",xs)
+@elapsed samples = mcmc(x0,g,slice_sampler,niter)
+csvwrite("examples/results/slice.g.csv",samples)
 
-@elapsed xs = mcmc(x0,h,slice_sampler,niter) 
-csvwrite("examples/results/slice.h.dat",xs)
+@elapsed samples = mcmc(x0,h,slice_sampler,niter) 
+csvwrite("examples/results/slice.h.csv",samples)
 
-@elapsed xs = mcmc(x0,g,mh_sampler,niter)
-csvwrite("examples/results/mh.g.dat",xs)
+@elapsed samples = mcmc(x0,g,mh_sampler,niter)
+csvwrite("examples/results/mh.g.csv",samples)
 
-@elapsed xs = mcmc(x0,h,mh_sampler,niter)
-csvwrite("examples/results/mh.h.dat",xs)
+@elapsed samples = mcmc(x0,h,mh_sampler,niter)
+csvwrite("examples/results/mh.h.csv",samples)
 
