@@ -21,7 +21,7 @@ metrop_sampler(x::Float64, g::Density, sd::Float64, gx::Float64) = mh_sampler(x,
 
 # Multivariate case
 function metrop_sampler(x::Array{Float64,1}, g::Function, sd::Float64, gx::Array{Float64,1})
-  x1 = x + sd*randn(numel(x))
+  x1 = x + randn(numel(x))*sd
   gx1 = g(x1)
   if gx1 - gx > log(rand())
     x = x1
@@ -32,7 +32,8 @@ end
 
 function metrop_sampler(x::Vector{Float64}, g::Function, sd::Matrix{Float64}, gx::Vector{Float64})
 # If C is the desired covariance of the proposal then sd = chol(C)
-  x1 = x + sd*randn(1,numel(x))
+# Should probably add some error checking inc ase C is not p.s.d.
+  x1 = x + randn(1,numel(x))*sd
   gx1 = g(x1)
   if gx1 - gx > log(rand())
     x = x1
