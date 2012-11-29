@@ -1,8 +1,6 @@
-load("Distributions.jl")
-using Distributions
 
 # Univariate case
-function metropolisolis_sampler(x::Float64, g::Function, sd::Float64, gx::Float64)
+function metropolis_sampler(x::Float64, g::Function, sd::Float64, gx::Float64)
   x1 = x + randn()*sd
   gx1 = g(x1)
   if gx1 - gx > log(rand())
@@ -34,9 +32,9 @@ function metropolis_sampler(x::Vector{Float64}, g::Function, sd::Float64, gx::Ve
 end
 
 function metropolis_sampler(x::Vector{Float64}, g::Function, C::Matrix{Float64}, gx::Vector{Float64})
-# If C is the desired covariance of the proposal then sd = chol(C)
+# If C is the desired covariance of the proposal then sd = chol(C)'
 # Should probably add some error checking inc ase C is not p.s.d.
-  #sd = chol(C)'
+  #sd = chol(C)' # Probably should pass sd in directly
   #x1 = x + sd*randn(numel(x))
   x1 = rand(MultivariateNormal(x,C))
   gx1 = g(x1)

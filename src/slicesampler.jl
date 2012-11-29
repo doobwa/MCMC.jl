@@ -1,3 +1,9 @@
+load("Options.jl")
+using OptionsMod
+
+load("Distributions.jl")
+using Distributions
+
 # Ported from Radford Neal's R code, with a few thinggs missing
 
 # Arguments:

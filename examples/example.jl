@@ -27,9 +27,9 @@ csvwrite("examples/results/slice.g.dat",xs)
 @elapsed xs = mcmc(x0,h,slice_sampler,niter) 
 csvwrite("examples/results/slice.h.dat",xs)
 
-@elapsed xs = mcmc(x0,g,metrop,niter)
+@elapsed xs = mcmc(x0,g,metropolis_sampler,niter)
 csvwrite("examples/results/metrop.g.dat",xs)
 
-@elapsed xs = mcmc(x0,h,metrop,niter)
+@elapsed xs = mcmc(x0,h,metropolis_sampler,niter)
 csvwrite("examples/results/metrop.h.dat",xs)
 
