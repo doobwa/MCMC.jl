@@ -44,7 +44,7 @@ function metropolis_sampler(x::Vector{Float64}, g::Function, sd::Matrix{Float64}
   return x,gx
 end
 
-# Add in versions with default arguments
+# Versions with default arguments
 function metropolis_sampler(x::Vector{Float64}, g::Function, sd::Matrix{Float64})
   gx = g(x)
   metropolis_sampler(x,g,sd,gx)
